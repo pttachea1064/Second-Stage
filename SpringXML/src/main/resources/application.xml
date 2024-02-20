@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--Spring的配置文件-->
+    <!--将User对象的创建交给Spring管理-->
+<!--    bean標籤的作用就是將指定的物件交給Spring容器管理 又以無參數構造創建-->
+<!--    class 屬性指定對象 物件需要通過全名路徑指定(包名字.類名字) -->
+<!--    id 屬性 給容器中的物件起標籤號碼 ,方便日後通過編號獲取容器中的物件-->
+    <bean id="user01" class ="cn.tedu.pojo.User"></bean>
+    <!--通过set方式注入-->
+
+    <bean id="user02" class ="cn.tedu.pojo.User">
+<!--        property屬性 調用set方法注入-->
+<!--        name 屬性表示調用set方法 值是就表示調用setXxx#45;&#45;xxx-->
+<!--        value屬性 注入的值-->
+        <property name="name" value="牛一群"/>
+        <property name="age" value="13"/>
+    </bean>
+<!--    構造器注入-->
+    <bean id="user03" class ="cn.tedu.pojo.User">
+<!--        constructor-arg 標籤 調用構造器注入-->
+<!--        name 屬性表示要給構造器中的同名參數賦予數值-->
+<!--        age 屬性表示要賦予的數值-->
+        <constructor-arg name = "name" value = "李四"/>
+        <constructor-arg name = "age" value = "18"/>
+    </bean>
+ <bean id="user04" class ="cn.tedu.pojo.User">
+<!--        constructor-arg 標籤 調用構造器注入-->
+<!--     也可以不寫name 來傳送數值 但是要注意構造內容的順序 要與構造器一致-->
+        <constructor-arg  value = "王武"/>
+        <constructor-arg value = "35"/>
+    </bean>
+
+
+</beans>
+<!--
+XML文件是非常常見的一種標籤配置文件
+只要注意一下內容:
+1.標籤的首尾關係
+<a></a>
+<a/>
+2.標籤嵌套關係需要嚴格注意
+<beans>
+    <bean></bean>
+    <bean></bean>
+</beans>
+3.對於配置文件的內容 會抄寫遠比記憶來的好也來的快所以會搜尋比較重要
+-->

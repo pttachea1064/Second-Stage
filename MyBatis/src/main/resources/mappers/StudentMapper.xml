@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--mapper标签: 专门定义SQL的标签-->
+<!--namespace属性: 指定要绑定的接口的全路径-->
+<mapper namespace="cn.tedu.mapper.StudentMapper">
+    <!--
+    MyBatis的配置文件开发,会将所有的接口要绑定的SQL,写在配置文件中,
+    由于后期的开发中,配置文件很多,所以会专门在resources目录下,创建一个mappers目录,
+    专门存放MyBatis的SQL配置文件
+    但是需要注意,配置文件的命名,一般为表名+Mapper,也就是和接口会名字相同,
+    原因是因为接口和配置文件一般都是一对一关联的,所以需要快速定位,所以同名是方便开发的
+    配置文件开发流程:
+    ①需要在application.yml文件中,指定SQL配置文件的位置,当MyBatis框架启动时,会自动定位配置文件
+    ②配置文件绑定的接口路径,在namespace中,添加绑定的接口的包名+类名
+    ③在mapper标签中,定义SQL语句
+    -->
+    <!--
+    如果定义的是查询SQL,使用<select>标签
+    如果定义的是新增SQL,使用<insert>标签
+    如果定义的是删除SQL,使用<delete>标签 → 增删改SQL语句,也可以统一使用<update>标签
+    如果定义的是修改SQL,使用<update>标签
+    <select>标签、<insert>标签、<delete>标签和<update>标签都需要指定id值
+    id属性: 相当于是给SQL语句起一个名字,要求就是在当前SQL配置文件中,不能重名,并且id值要求和绑定的接口同名,
+    这样调用接口时,就会自动扫描绑定的配置文件,获取id同名的SQL,去执行
+    而<select>标签还有要求,必须指定另一个属性resultType
+    resultType属性: 指定SQL执行的结果封装的实体类类型,不论查询的结果是多条还是单条,都直接写实体类的全路径即可
+    -->
+    <!--
+    常见错误:
+    ①BindingException: Invalid bound statement (not found): cn.tedu.mapper.StudentMapper.selectStudentAll
+    绑定异常,一般都是SQL的id值和接口名不一致导致的
+    也可能是namespace的值绑定的接口路径有误
+    ②java.lang.IllegalArgumentException: Mapped Statements collection already contains value for cn.tedu.mapper.StudentMapper.selectStudentAll
+    一般情况都是SQL文件中,定义了id值相同的SQL语句
+    ③查询结果中包含了null值
+    检查数据库中的数据,是否就是null
+    检查查询的SQL语句,是否和实体类的属性能够全部对应
+    -->
+    <select id="selectStudentAll" resultType="cn.tedu.pojo.Student">
+        SELECT id,
+               name,
+               age,
+               gender,
+               job,
+               birth,
+               location_id,
+               team_leader,
+               class_id
+        FROM student
+    </select>
+    <!--增删改不需要指定resultType-->
+    <insert id="insertOne">
+        INSERT INTO student(id, name, age, gender, job, birth, location_id, team_leader, class_id)
+        VALUES (null, 'GGBond', 10, '男', '猪猪侠', null, 1, 1, 1)
+    </insert>
+
+    <update id="updateOne">
+        UPDATE student
+        SET job = '小猪'
+        WHERE name = 'GGBond'
+    </update>
+
+    <delete id="deleteOne">
+        DELETE
+        FROM student
+        WHERE name = 'GGBond'
+    </delete>
+    <!--
+    我们使用MyBatis框架时,定义的SQL语句,一般都是语义定义,也就是具体的增删改查的内容是不一定的,具体需要看用户传递的值,
+    所以我们一般都是定义SQL骨架,参数位置,就需要使用#{}占位符来指定了
+    #{}有以下的要求
+    ①每条SQL中的#{}占位符可以有任意个,具体看SQL语义
+    ②每一个#{}占位符都需要定义名字,每个占位符的名字不能相同
+    ③如果SQL中只包含一个占位符,那么占位符的名字可以任意(能使用字段名就使用字段名)
+    ④如果SQL中包含多个占位符,占位符的名字最好和字段名相同
+    ⑤如果SQL中包含多个占位符,而多个占位符是同一个字段的赋值,那么只能起其他的名字
+
+    -->
+    <!--
+    XML配置文件中,小于号是特殊符号,不能直接使用,所以需要考虑使用替换符
+    ①使用&lt;替换小于号
+    ②使用CDATA区,在该区域内的所有字符,都会被当做是普通字符
+    -->
+    <select id="selectListByLocationId" resultType="cn.tedu.pojo.Student">
+        <![CDATA[
+        SELECT *
+        FROM student
+        WHERE location_id >= #{lid1}
+          AND location_id <= #{lid2}
+        ]]>
+    </select>
+    <select id="selectListByIdAndGender" resultType="cn.tedu.pojo.Student">
+        SELECT *
+        FROM student
+        WHERE id > #{id}
+          AND gender = #{gender}
+    </select>
+
+    <select id="selectOneById" resultType="cn.tedu.pojo.Student">
+        SELECT id,
+               name,
+               age,
+               gender,
+               job,
+               birth,
+               location_id,
+               team_leader,
+               class_id
+        FROM student
+        WHERE id = #{id}
+    </select>
+
+    <!--CTRL+SHIFT+ "-" 或者 "+"-->
+    <insert id="insertOne2">
+        INSERT INTO student (id, name, age, gender, job, birth, location_id, team_leader, class_id)
+        VALUES (null, #{name}, #{age}, #{gender}, #{job}, #{birth}, #{locationId}, #{teamLeader}, #{classId})
+    </insert>
+
+    <delete id = "deleteOne2">
+        DELETE
+        FROM student
+        WHERE name='孙悟空'
+    </delete>
+
+    <update id="updateOne2">
+        UPDATE student
+        SET job = #{job},
+            age = #{age}
+        WHERE name = #{name}
+    </update>
+
+</mapper>

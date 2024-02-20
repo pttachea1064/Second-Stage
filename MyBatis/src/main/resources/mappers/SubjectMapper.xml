@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.mapper.SubjectMapper">
+
+    <resultMap id="sub01" type="Subject">
+        <id column="sid" property="id"/>
+        <result column="sname" property="name"/>
+        <!--collection标签: 表示要开始进行一对多的映射-->
+        <!--property属性: 表示要进行一对多映射的属性名-->
+        <!--ofType属性: 表示一对多的属性的类型-->
+        <collection property="teacherList" ofType="Teacher">
+            <!--一对多映射的规则和resultMap的映射规则一致-->
+            <id column="tid" property="id"/>
+            <result column="tname" property="name"/>
+            <result column="age" property="age"/>
+            <result column="title" property="title"/>
+            <result column="manager" property="manager"/>
+            <result column="salary" property="salary"/>
+            <result column="comm" property="comm"/>
+            <result column="gender" property="gender"/>
+            <result column="subject_id" property="subjectId"/>
+        </collection>
+    </resultMap>
+    <select id="selectSubjectTeacherByName" resultMap="sub01">
+        SELECT s.id   sid,
+               s.name sname,
+               t.id   tid,
+               t.name tname,
+               t.age,
+               t.title,
+               t.manager,
+               t.salary,
+               t.comm,
+               t.gender,
+               t.subject_id
+        FROM subject s
+                 LEFT JOIN teacher t
+                           ON s.id = t.subject_id
+        WHERE s.name = #{name}
+    </select>
+</mapper>

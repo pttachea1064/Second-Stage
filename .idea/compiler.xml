@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="MavenDemo" />
+        <module name="JDBCTemplate" />
+        <module name="MyBatis" />
+        <module name="SpringBoot" />
+        <module name="SmartBlog" />
+        <module name="GeneratorDemo" />
+        <module name="HikariCP" />
+        <module name="SpringXML" />
+        <module name="SpringAnno" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="GeneratorDemo" target="1.8" />
+      <module name="HikariCP" target="1.8" />
+      <module name="JDBCTemplate" target="1.8" />
+      <module name="MavenDemo" target="8" />
+      <module name="MyBatis" target="1.8" />
+      <module name="SmartBlog" target="1.8" />
+      <module name="SpringAnno" target="1.8" />
+      <module name="SpringBoot" target="1.8" />
+      <module name="SpringBootDemo" target="1.8" />
+      <module name="SpringXML" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="GeneratorDemo" options="-parameters" />
+      <module name="HikariCP" options="-parameters" />
+      <module name="JDBCTemplate" options="-parameters" />
+      <module name="MyBatis" options="-parameters" />
+      <module name="SmartBlog" options="-parameters" />
+      <module name="SpringAnno" options="-parameters" />
+      <module name="SpringBoot" options="-parameters" />
+      <module name="SpringBootDemo" options="-parameters" />
+      <module name="SpringXML" options="-parameters" />
+    </option>
+  </component>
+</project>

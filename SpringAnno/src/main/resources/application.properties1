@@ -1,0 +1,13 @@
+#k=v
+#這個配置中 不寫中文 所以都用英文或羅馬拼音
+user.address=beijing
+user.tel=091234567
+user.idCard=15191919191
+
+
+a.b.c.d.e.f.h.i= hello
+a.b.i=bye
+a.b.c=hello1
+a.b.c.d=hello2
+a.b.c.d.e.f=hello3
+a.b.c.d.e.f.h=hello4

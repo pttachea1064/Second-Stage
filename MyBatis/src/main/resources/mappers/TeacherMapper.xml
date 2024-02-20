@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.mapper.TeacherMapper">
+    <!--
+    resultType会自动映射,将结果中字段自动映射到对应的属性中
+    映射规则: 表字段名名和属性名相同时
+    -->
+    <select id="selectOneById" resultType="cn.tedu.pojo.Teacher">
+        SELECT id,
+               name,
+               age,
+               title,
+               manager,
+               salary     sal,
+               comm,
+               gender     gen,
+               subject_id sub
+        FROM teacher
+        WHERE id = #{id}
+    </select>
+    <!--resultMap标签: 在该标签中自定义映射规则-->
+    <!--id属性: 规则的编号,要求在当前的配置文件中不能重复-->
+    <!--type属性: 自定义映射规则,要操作的实体类的全路径-->
+    <resultMap id="teach01" type="Teacher">
+        <!--在标签中自定义映射规则: 每一行有映射规则,就都指定出来-->
+        <!--id标签: 映射主键字段-->
+        <!--column属性: 主键的表字段名-->
+        <!--property属性: 实体类的属性名-->
+        <id column="id" property="id"/>
+        <!--result标签: 映射普通字段-->
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="title" property="title"/>
+        <result column="sal" property="salary"/>
+        <result column="comm" property="comm"/>
+        <result column="gen" property="gender"/>
+        <result column="sub" property="subjectId"/>
+    </resultMap>
+    <!--resultMap可以兼容自动映射,也就是autoMapping="true"这个属性的作用-->
+    <!--建议后期只用手动映射-->
+    <resultMap id="teach02" type="Teacher" autoMapping="true">
+        <result column="sal" property="salary"/>
+        <result column="gen" property="gender"/>
+        <result column="sub" property="subjectId"/>
+    </resultMap>
+    <!--resultMap属性: 表示当前查询的SQL的结果需要手动映射,值为使用的映射规则的id-->
+    <select id="selectOneById2" resultMap="teach02">
+        SELECT id,
+               name,
+               age,
+               title,
+               manager,
+               salary     sal,
+               comm,
+               gender     gen,
+               subject_id sub
+        FROM teacher
+        WHERE id = #{id}
+    </select>
+    <!--
+    在进行一对一映射时,可以使用<result column="sid" property="subject.id"/>形式映射,
+    这种方式相对于简单环境而言,是比较舒适的
+    缺点:
+    可读性和组织性较差(在复杂的结构中,看不出具体的层级关系)
+    可维护性差(表结构发生变化时)
+    灵活性差(功能很少)
+    -->
+    <resultMap id="teach03" type="Teacher">
+        <id column="tid" property="id"/>
+        <result column="tname" property="name"/>
+        <result column="age" property="age"/>
+        <result column="title" property="title"/>
+        <result column="salary" property="salary"/>
+        <result column="comm" property="comm"/>
+        <result column="gender" property="gender"/>
+        <result column="subject_id" property="subjectId"/>
+        <!--将sid字段映射到Teacher类中的subject属性中id属性-->
+        <result column="sid" property="subject.id"/>
+        <!--将sname字段映射到Teacher类中的subject属性中的name属性-->
+        <result column="sname" property="subject.name"/>
+    </resultMap>
+
+    <resultMap id="teach04" type="Teacher">
+        <id column="tid" property="id"/>
+        <result column="tname" property="name"/>
+        <result column="age" property="age"/>
+        <result column="title" property="title"/>
+        <result column="salary" property="salary"/>
+        <result column="comm" property="comm"/>
+        <result column="gender" property="gender"/>
+        <result column="subject_id" property="subjectId"/>
+        <!--association标签: 表示要开始进行一对一关系的映射-->
+        <!--property属性: 表示指定一对一映射的属性名-->
+        <!--javaType属性: 表示一对一属性名的类型-->
+        <association property="subject" javaType="Subject">
+            <!--一对一映射的规则和resultMap的映射规则一致-->
+            <id column="sid" property="id"/>
+            <result column="sname" property="name"/>
+        </association>
+    </resultMap>
+    <!--如果SQL语句中,查询的字段名相同时,一定要使用别名加以区分-->
+    <select id="selectTeacherSubjectById" resultMap="teach04">
+        SELECT t.id   tid,
+               t.name tname,
+               t.age,
+               t.title,
+               t.manager,
+               t.salary,
+               t.comm,
+               t.gender,
+               t.subject_id,
+               s.id   sid,
+               s.name sname
+        FROM teacher t
+                 LEFT JOIN subject s
+                           ON t.subject_id = s.id
+        WHERE t.id = #{id}
+    </select>
+</mapper>

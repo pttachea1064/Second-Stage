@@ -1,0 +1,28 @@
+#设置数据源的基本信息
+spring:
+  datasource:
+    #指定连接的URL
+    url: jdbc:mysql://localhost:3306/sblog?serverTimezone=Asia/Shanghai&characterEncoding=utf8
+    #数据库的用户名
+    username: root
+    #数据库的密码
+    password: root
+
+mybatis:
+  configuration:
+    #开启驼峰映射 表字段teacher_id 映射 属性teacherId
+    map-underscore-to-camel-case: true
+  #指定MyBatis的SQL配置文件所在的路径
+  mapper-locations: classpath:/mappers/*.xml
+  type-aliases-package: cn.tedu.smartblog.pojo
+
+
+pagehelper:
+  helper-dialect: mysql #指定数据库,不指定会默认检测数据库类型
+
+#开启主启动类所在包的日志输入等级为debug级别(调试级别)
+logging:
+  level:
+    cn:
+      tedu:
+        smartblog: debug

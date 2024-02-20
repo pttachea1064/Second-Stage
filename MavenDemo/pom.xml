@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.tedu</groupId>
+    <artifactId>MavenDemo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+    <!--pom.xml文件,是maven項目的核心配置,只要項目中包含該文件
+    一定是maven項目,
+    並且如果項目中的pom.xml文件有紅線報錯,說明maven項目建立失敗,直接重新創立
+    我們可以在pom.xml中,添加各種依賴的座標,來下載依賴(就是我們的最常用功能)-->
+
+    <!-- 如果通過pom.xml下載指定的依賴-->
+    <!-- 第一步 使用dependecies標籤來表示開始定義各個依賴之座標!
+         整個pom.xml中 只能存在一個dependencies 如果需要再存儲新的依賴 要在這裡面寫-->
+    <!--JDBC的坐标-->
+    <dependencies>
+        <!--第二步 使用dependency來表示一個依賴座標-->
+        <dependency>
+            <!--第三步:定義具體的座標值(不需要記憶!可以直接網上下載)-->
+            <!--第四部 點pom.xml文件右上角的刷新按鈕 !! 以後只要修改pom.xml內容就要刷新 不然不會生效-->
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.32</version>
+        </dependency>
+    </dependencies>
+    <!--依賴下載的位置: 依賴下載到了maven的本地倉庫中, 默認下載到了  C:\Users\TS USER\.m2\repository  -->
+
+    <!--
+    依赖下载的位置: 依赖下载到了maven的本地仓库中,默认是下载到了C:\Users\用户名\.m2\repository
+    接下来需要根据下载的依赖的坐标,来定位依赖的具体位置:
+    ①根据groupId,定位到mysql目录
+    ②根据artifactId,在mysql目录中,定位mysql-connector-java目录
+    ③根据version,在mysql-connector-java目录中,定位5.1.32目录
+    ④在5.1.32目录中,就存储了,下载的依赖
+    上述的方式必须要掌握!原因是因为后面可能会遇到依赖下载失败的问题!所以需要通过这种方式去查看依赖是否下载成功
+    -->
+    <!--
+    依赖的坐标从哪里获取?
+    ①可以访问https://mvnrepository.com/来下载对应的依赖
+    ②在搜索框,输入要搜索的依赖的名字,一般都是artifactId
+    ③输出的搜索结果中,一般可以选择,点击量最多的,当然具体要看实际需要使用的内容
+    ④在详细内容面板中,选择要下载的对应版本,然后点击对应坐标,即可赋值
+    ⑤将坐标粘贴到pom.xml的dependencies标签中即可
+    -->
+
+</project>

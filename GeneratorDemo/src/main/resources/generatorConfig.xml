@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd"><!--报错不用管-->
+
+<generatorConfiguration>
+    <!--
+    targetRuntime: 指定的生成的版本
+    MyBatis3Simple 简洁版(最基本的CRUD)
+    MyBatis3 高级版(不建议使用!)
+    -->
+    <context id="DB2Tables" targetRuntime="MyBatis3Simple">
+        <!--JDBC连接的资源-->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/sblog?characterEncoding=utf8&amp;serverTimezone=Asia/Shanghai"
+                        userId="root"
+                        password="root">
+        </jdbcConnection>
+        <!--
+        JAVA实体类逆向生成的策略
+        targetProject属性: 表示实体类包路径指定生成的位置
+        targetPackage属性: 表示实体类的包路径是什么,如果没有会自动创建
+        -->
+        <javaModelGenerator targetPackage="cn.tedu.pojo" targetProject=".\src\main\java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!--
+        SQL映射文件的逆向生成策略
+        targetProject属性: 表示SQL映射文件文件夹路径指定生成的位置
+        targetPackage属性: 表示SQL映射文件的文件夹路径是什么,如果没有会自动创建
+        -->
+        <sqlMapGenerator targetPackage="mapper" targetProject=".\src\main\resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!--
+        Mapper接口的逆向生成策略
+        targetProject属性: 表示Mapper接口包路径指定生成的位置
+        targetPackage属性: 表示Mapper接口的包路径是什么,如果没有会自动创建
+        -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="cn.tedu.mapper" targetProject=".\src\main\java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+        <!--
+        逆向分析的表
+        domainObjectName属性指定的值是Users,所以会根据这个值,生成文件名的名字
+        Users
+        UsersMapper
+        UsersMapper.xml
+        -->
+        <table tableName="tb_users" domainObjectName="Users"/>
+        <table tableName="tb_tags" domainObjectName="Tags"/>
+        <table tableName="tb_articles" domainObjectName="Articles"/>
+    </context>
+</generatorConfiguration>

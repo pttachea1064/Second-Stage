@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.smartblog.dao.UserDao">
+    <insert id="insertOne">
+        INSERT INTO tb_users (id, username, nickname, password, mobile, status, created_time, modified_time)
+        VALUES (null, #{username}, #{nickname}, #{password}, #{mobile}, #{status}, #{createdTime}, #{modifiedTime})
+    </insert>
+
+    <!--根据时间查询用信息基础版本-->
+    <select id="demo01" resultType="User">
+        <![CDATA[
+        SELECT *
+        FROM tb_users
+        WHERE created_time >= #{beginTime}
+          AND created_time <= #{endTime}
+        ]]>
+    </select>
+
+    <!--优化版本 引入if标签 -->
+    <!--if标签: 判断条件,根据条件的结果,来让标签中的SQL语句是否生效-->
+    <!--test属性: 判断条件,如果结果为真,则SQL生效,如果结果假,SQL失效-->
+    <select id="demo02" resultType="User">
+        SELECT *
+        FROM tb_users
+        <if test="beginTime != null and endTime != null">
+            WHERE created_time >= #{beginTime}
+            AND created_time &lt;= #{endTime}
+        </if>
+        <if test="beginTime != null and endTime == null">
+            WHERE created_time >= #{beginTime}
+        </if>
+        <if test="beginTime == null and endTime != null">
+            WHERE created_time &lt;= #{endTime}
+        </if>
+    </select>
+
+    <!--优化版本 精简判断-->
+    <!--
+    只传beginTime:  SELECT * FROM tb_users WHERE 1=1 AND created_time >= #{beginTime}
+    只传endTime:    SELECT * FROM tb_users WHERE 1=1 AND created_time <= #{endTime}
+    传beginTime和endTime:  SELECT * FROM tb_users WHERE 1=1 AND created_time >= #{beginTime} AND created_time <= #{endTime}
+    什么也不传:      SELECT * FROM tb_users WHERE 1=1
+    -->
+    <select id="demo03" resultType="User">
+        SELECT *
+        FROM tb_users
+        WHERE 1=1
+        <if test="beginTime != null">
+            AND created_time >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            AND created_time &lt;= #{endTime}
+        </if>
+    </select>
+
+    <!--最终版本 引入where标签-->
+    <!--where标签: 一般和if标签一起使用,效果如下:
+        ①if标签不生效,where标签相当于没有写
+        ②if标签生效,where标签会变成WHERE关键字,并且会自动将连接的第一个条件的AND自动去除-->
+    <select id="selectListByTime" resultType="User">
+        SELECT *
+        FROM tb_users
+        <where>
+            <if test="beginTime != null">
+                AND created_time >= #{beginTime}
+            </if>
+            <if test="endTime != null">
+                AND created_time &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
+    <!--原始版-->
+    <update id="demo04">
+        UPDATE tb_users
+        SET username=#{username},
+            nickname=#{nickname},
+            mobile=#{mobile},
+            modified_time=NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!--优化版 引入if标签-->
+    <update id="demo05">
+        UPDATE tb_users
+        SET
+        <if test="username!=null">username=#{username},</if>
+        <if test="nickname!=null">nickname=#{nickname},</if>
+        <if test="mobile!=null">mobile=#{mobile},</if>
+        <if test="modifiedTime!=null">modified_time=#{modifiedTime}</if>
+        WHERE id = #{id}
+    </update>
+
+    <!--最终版本 引入set标签-->
+    <!--set标签: 常用于修改的SQL语句,如果set标签中的SQL以","结尾,会智能的去除","-->
+    <update id="updateOne">
+        UPDATE tb_users
+        <set>
+            <if test="username!=null">username=#{username},</if>
+            <if test="nickname!=null">nickname=#{nickname},</if>
+            <if test="mobile!=null">mobile=#{mobile},</if>
+            <if test="modifiedTime!=null">modified_time=#{modifiedTime}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <!--foreach标签: 遍历传递过来的容器参数-->
+    <!--collection属性: 表示要遍历哪个元素,不论该元素的类型是数组还是集合,直接该元素的名字即可-->
+    <!--item属性: 承接每次遍历的元素,然后结合#占位符,将遍历的元素,放置在指定的位置-->
+    <!--separator属性: 设置遍历的元素的之间的分隔符-->
+    <!--open属性: 设置前缀,会在遍历的所有元素之前,设置前缀-->
+    <!--close属性: 设置后缀,会在遍历的所有元素之后,设置后-->
+    <update id="demo06">
+        UPDATE tb_users
+        SET status = #{status}
+        <foreach collection="ids" item="id" separator="," open="WHERE id IN (" close=")">
+            #{id}
+        </foreach>
+    </update>
+    <!--优化版本 引入if标签,防止ids为null-->
+    <update id="demo07">
+        UPDATE tb_users
+        SET status = #{status}
+        <if test="ids != null">
+            <foreach collection="ids" item="id" separator="," open="WHERE id IN (" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </update>
+    <!--最终版本,引入choose标签-->
+    <!--choose标签: 做分支判断-->
+    <!--when标签: 其中的一个分支,判断test中的内容,为真,则内部的元素会生效,否则失效-->
+    <!--otherwise标签: 所有的分支都不生效时,该标签的内容会生效-->
+    <update id="updateStatusByIds">
+        UPDATE tb_users
+        SET status = #{status}
+        <where>
+            <choose>
+                <when test="ids != null">
+                    <foreach collection="ids" item="id" separator="," open=" id IN (" close=")">
+                        #{id}
+                    </foreach>
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
+        </where>
+    </update>
+
+    <select id="selectListByChoose" resultType="User">
+        SELECT * FROM tb_users
+        <where>
+            <choose>
+                <when test="username!=null and nickname == null">
+                    username = #{username}
+                </when>
+                <when test="nickname!=null and username == null">
+                    nickname = #{nickname}
+                </when>
+                <when test="nickname!=null and username != null">
+                    username = #{username}
+                </when>
+                <otherwise>
+                    id &lt; 10
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <select id="selectByPage" resultType="User">
+        SELECT *
+        FROM tb_users
+        LIMIT #{index},#{size}
+    </select>
+
+    <select id="selectByPage02" resultType="User">
+        SELECT *
+        FROM tb_users
+    </select>
+</mapper>

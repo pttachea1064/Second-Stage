@@ -1,0 +1,17 @@
+#yml檔案中的 基本語法
+#k:(空格)v    k: v
+
+name: tom
+#properties寫法如下
+#  user.address=beijing
+#  user.tel=091234567
+#  user.idCard=15191919191
+
+#yml 寫法 因為ddress是user下面的層級(並非數值) 所以要用Enter到下面層級
+# 然後下一個層級要在前方留一個空格
+person:
+  address: nanjing
+  tel: 091234567
+  idCard: 12345678
+  wife: true
+  birth: 1999/01/01

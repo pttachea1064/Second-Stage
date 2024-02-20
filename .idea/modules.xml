@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/GeneratorDemo/GeneratorDemo.iml" filepath="$PROJECT_DIR$/GeneratorDemo/GeneratorDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HikariCP/HikariCP.iml" filepath="$PROJECT_DIR$/HikariCP/HikariCP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JDBC/JDBC.iml" filepath="$PROJECT_DIR$/JDBC/JDBC.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JDBCTemplate/JDBCTemplate.iml" filepath="$PROJECT_DIR$/JDBCTemplate/JDBCTemplate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/JSDSecondStage2306.iml" filepath="$PROJECT_DIR$/.idea/JSDSecondStage2306.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MavenDemo/MavenDemo.iml" filepath="$PROJECT_DIR$/MavenDemo/MavenDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyBatis/MyBatis.iml" filepath="$PROJECT_DIR$/MyBatis/MyBatis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SmartBlog/SmartBlog.iml" filepath="$PROJECT_DIR$/SmartBlog/SmartBlog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringAnno/SpringAnno.iml" filepath="$PROJECT_DIR$/SpringAnno/SpringAnno.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringBoot/SpringBoot.iml" filepath="$PROJECT_DIR$/SpringBoot/SpringBoot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringXML/SpringXML.iml" filepath="$PROJECT_DIR$/SpringXML/SpringXML.iml" />
+    </modules>
+  </component>
+</project>

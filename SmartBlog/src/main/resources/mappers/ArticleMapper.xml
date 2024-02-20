@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.smartblog.dao.ArticleDao">
+    <!--useGeneratedKeys属性: 表示此SQL执行时,需要使用自增主键-->
+    <!--keyProperty属性: 会将执行SQL后,获取的自增主键,存储到当前映射的实体类实例对应属性中-->
+    <insert id="insertOne" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_articles(id, title, type, content, status, user_id, created_time, modified_time)
+        VALUES (null, #{title}, #{type}, #{content}, #{status}, #{userId}, NOW(), NOW())
+    </insert>
+    <!--
+    定义结果集的映射规则
+    定义Article文章信息的映射规则
+    定义User作者信息的映射规则
+    定义Tags标签信息的映射规则
+    -->
+    <resultMap id="a" type="Article">
+        <id property="id" column="id"></id>
+        <result property="title" column="title"></result>
+        <result property="type" column="type"></result>
+        <result property="content" column="content"></result>
+        <result property="status" column="status"></result>
+        <result property="userId" column="user_id"></result>
+        <result property="createdTime" column="created_time"></result>
+        <result property="modifiedTime" column="modified_time"></result>
+        <!--指定User的映射规则-->
+        <association property="user" javaType="User">
+            <id property="id" column="userId"></id>
+            <result property="username" column="username"></result>
+            <result property="nickname" column="nickname"></result>
+            <result property="password" column="password"></result>
+            <result property="mobile" column="mobile"></result>
+            <result property="status" column="status"></result>
+            <result property="createdTime" column="created_time"></result>
+            <result property="modifiedTime" column="modified_time"></result>
+        </association>
+        <!--指定Tags的映射规则-->
+        <collection property="tags" ofType="Tag">
+            <!-- property 属性 column 列 -->
+            <id property="id" column="tagId"></id>
+            <result property="name" column="name"></result>
+            <result property="remark" column="remark"></result>
+            <result property="createdTime" column="created_time"></result>
+            <result property="modifiedTime" column="modified_time"></result>
+        </collection>
+    </resultMap>
+    <!--sql标签: 提前xml文件中,重复的SQL片段-->
+    <!--id属性: 为SQL片段起名字,方便后期使用-->
+    <sql id="b">
+        SELECT ta.id,
+               ta.title,
+               ta.type,
+               ta.content,
+               ta.status,
+               ta.user_id,
+               ta.created_time,
+               ta.modified_time,
+               tu.id userId,
+               tu.username,
+               tu.nickname,
+               tu.password,
+               tu.mobile,
+               tu.status,
+               tu.created_time,
+               tu.modified_time,
+               tat.id,
+               tat.article_id,
+               tat.tag_id,
+               tat.created_time,
+               tat.modified_time,
+               tt.id tagId,
+               tt.name,
+               tt.remark,
+               tt.created_time,
+               tt.modified_time
+        FROM tb_articles ta
+                 LEFT JOIN tb_users tu ON ta.user_id = tu.id
+                 LEFT JOIN tb_article_tags tat ON ta.id = tat.article_id
+                 LEFT JOIN tb_tags tt ON tat.tag_id = tt.id
+    </sql>
+    <!--include标签: 使用SQL片段-->
+    <!--refid属性: 引入的SQL片段的id值-->
+    <select id="selectOneById" resultMap="a">
+        <include refid="b"></include>
+        WHERE ta.id = #{id};
+    </select>
+
+    <select id="selectList" resultMap="a">
+        <include refid="b"></include>
+    </select>
+</mapper>

@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/tedu?useUnicode=true&characterEncoding=utf8&serverTimeZone=Asia/Shanghai
+    username: root
+    password: root
+  banner:
+    image:
+      location: tedu.png
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true #开启驼峰映射
+  mapper-locations: classpath:mappers/*.xml #指定SQL配置文件在mappers目录下
+  type-aliases-package: cn.tedu.pojo #指定了所有的实体类的包路径
+
+logging:
+  level:
+    cn:
+      tedu: debug #设置输出主启动类所在包下的文件的日志内容
